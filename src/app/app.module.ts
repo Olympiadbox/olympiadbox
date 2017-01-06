@@ -1,10 +1,23 @@
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule, ApplicationRef, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
+
+//Added by Ashish
+import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { BrowserXhr, RequestOptions } from '@angular/http';
+
+//DreamFactory Modules, Services, Providers
+import { DfRequestOptions } from '../../config/authenticate/interceptors';
+import { CustomExceptionHandler } from '../../config/authenticate/exception-handler';
+
+
+
+//End of Ashish
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -39,18 +52,14 @@ type StoreType = {
     App
   ],
   imports: [ // import Angular's modules
-    BrowserModule,
-    HttpModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgaModule.forRoot(),
-    PagesModule,
-    routing
+    BrowserModule, HttpModule, RouterModule, FormsModule, ReactiveFormsModule,
+    NgaModule.forRoot(), PagesModule, routing, CommonModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
-    ENV_PROVIDERS,
-    APP_PROVIDERS
+    ENV_PROVIDERS, APP_PROVIDERS,
+    { provide : LocationStrategy, useClass : HashLocationStrategy },
+    { provide : RequestOptions,   useClass: DfRequestOptions },
+    { provide : ErrorHandler,  useClass: CustomExceptionHandler }
   ]
 })
 
